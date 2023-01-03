@@ -64,11 +64,14 @@
                 y : -100,
             };
 
+
+            
+
             // simulation
 
             function simulate(){
                 if (0.5 < ball.pos.y < canvas.height/cScale - 0.6){
-                    ball.pos.y = (1/2) * accel.y * (deltaT/1000)**2 + ball.ball.velo.y * (deltaT/1000) + ball.pos.y;
+                    ball.pos.y = (1/2) * accel.y * (deltaT/1000)**2 + ball.velo.y * (deltaT/1000) + ball.pos.y;
                     ball.velo.y = ball.velo.y + (accel.y * (deltaT/1000));
                 }
 
