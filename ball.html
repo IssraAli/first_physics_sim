@@ -39,7 +39,7 @@
 
             var ball = {
                 radius : 0.5,
-                pos : {x : canvas.width/(2*cScale), y : canvas.height/cScale - 0.5},
+                pos : {x : canvas.width/(2*cScale), y : 0.8*canvas.height/(cScale) - 0.5},
             };
 
             // drawing
@@ -60,30 +60,35 @@
 
             var accel = {
                 x : 0,
-                y : -10,
+                y : -100,
             };
 
             var velo = {
-                x : 10, 
+                x : -10, 
                 y : 0,
             };
 
             // simulation
 
             function simulate(){
-                ball.pos.x = (1/2) * accel.x * (deltaT/1000)**2 + velo.x * (deltaT/1000) + ball.pos.x;
-                ball.pos.y = (1/2) * accel.y * (deltaT/1000)**2 + velo.y * (deltaT/1000) + ball.pos.y;
-
-                velo.y = velo.y + (accel.y * (deltaT/1000));
-                velo.x = velo.x + (accel.x * (deltaT/1000));
-
-                if (ball.pos.y <= 0.5 || ball.pos.y >= canvas.height/cScale - 0.5){
-                    velo.y = -velo.y
+                if (0.5 < ball.pos.y < canvas.height/cScale - 0.6){
+                    ball.pos.y = (1/2) * accel.y * (deltaT/1000)**2 + velo.y * (deltaT/1000) + ball.pos.y;
+                    velo.y = velo.y + (accel.y * (deltaT/1000));
                 }
 
-                if (ball.pos.x <= 0.5 || ball.pos.x >= canvas.width/cScale - 0.5){
-                    velo.x = -velo.x
+                if (0.5 < ball.pos.x < canvas.width/cScale - 0.6){
+                    ball.pos.x = (1/2) * accel.x * (deltaT/1000)**2 + velo.x * (deltaT/1000) + ball.pos.x;
+                    velo.x = velo.x + (accel.x * (deltaT/1000));
                 }
+                if (ball.pos.y < 0.5 || ball.pos.y > canvas.height/cScale - 0.5){
+                    ball.pos.y = 0.49
+                    velo.y = -(0.9*velo.y);
+                }
+
+                if (ball.pos.x < 0.5 || ball.pos.x >= canvas.width/cScale - 0.5){
+                    velo.x = -(0.9*velo.x);               
+                }
+                
             }
 
 
