@@ -1,0 +1,101 @@
+<! DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Ball</title>
+    </head>
+
+
+    <body>
+        <canvas id = "myCanvas" style = "border: 2px solid"></canvas>
+
+        <script>
+
+            // canvas setup
+
+            var canvas = document.getElementById("myCanvas"); // get canvas
+            var c = canvas.getContext("2d"); // get context
+
+            canvas.width = window.innerWidth - 20; // set width, height to inner width and height of the window with margin
+            canvas.height = window.innerHeight - 100;
+
+            var simMinWidth = 20.0; //minimum width of the screen regardless of the format
+            var cScale = Math.min(canvas.width, canvas.height) / simMinWidth;
+            var simWidth = canvas.width /cScale;
+            var sinHeight = canvas.height / cScale;
+
+            var deltaT = 10; //time step, ms
+
+            function cX(pos){
+                return pos.x * cScale;
+            }
+
+            function cY(pos){
+                return canvas.height - pos.y * cScale;
+            }
+
+            // scene
+
+            var ball = {
+                radius : 0.5,
+                pos : {x : canvas.width/(2*cScale), y : canvas.height/cScale - 0.5},
+            };
+
+            // drawing
+
+            function draw(){
+                c.clearRect(0, 0, canvas.width, canvas.height);
+
+                c.fillStyle = "#FF0000";
+
+                // draw circle
+                c.beginPath();
+                c.arc(
+                    cX(ball.pos), cY(ball.pos), cScale * ball.radius, 0.0, 2.0 *  Math.PI
+                );
+                c.closePath();
+                c.fill();
+            }
+
+            var accel = {
+                x : 0,
+                y : -10,
+            };
+
+            var velo = {
+                x : 10, 
+                y : 0,
+            };
+
+            // simulation
+
+            function simulate(){
+                ball.pos.x = (1/2) * accel.x * (deltaT/1000)**2 + velo.x * (deltaT/1000) + ball.pos.x;
+                ball.pos.y = (1/2) * accel.y * (deltaT/1000)**2 + velo.y * (deltaT/1000) + ball.pos.y;
+
+                velo.y = velo.y + (accel.y * (deltaT/1000));
+                velo.x = velo.x + (accel.x * (deltaT/1000));
+
+                if (ball.pos.y <= 0.5 || ball.pos.y >= canvas.height/cScale - 0.5){
+                    velo.y = -velo.y
+                }
+
+                if (ball.pos.x <= 0.5 || ball.pos.x >= canvas.width/cScale - 0.5){
+                    velo.x = -velo.x
+                }
+            }
+
+
+            function update(){
+                setTimeout(simulate, 10)
+                draw();
+                requestAnimationFrame(update);
+            }
+
+            update();
+
+        </script>
+    </body>
+
+</html>
